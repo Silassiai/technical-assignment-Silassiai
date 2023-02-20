@@ -1,3 +1,21 @@
+# How to review the bellow technical assignment
+
+**Installation**
+
+*Environment setup*
+
+- Add the .env file i have sent by email.
+
+*Follow the below commands to get the application up and running:*
+
+- `composer install`
+- `docker-compose up -d`
+- `docker-compose exec laravel.test bash`
+- `php artisan migrate --seed`
+- `php artisan sync:inbox-orders`
+- `npm i`
+- `npm run dev`
+
 # Technical assignment
 
 Create a small web app for an email-based ordering system.
