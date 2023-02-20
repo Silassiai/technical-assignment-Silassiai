@@ -16,6 +16,10 @@
 - `npm i`
 - `npm run dev`
 
+*Testing the application in the browser*
+
+- You can log in without registering, the details can be found in the email.
+
 # Technical assignment
 
 Create a small web app for an email-based ordering system.
