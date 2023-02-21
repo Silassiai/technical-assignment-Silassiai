@@ -58,11 +58,6 @@ class OrderService
             $order,
             new OrderMarkAsReadDto($seenAt ?? now()),
         );
-
-        resolve(MailboxOrderService::class)->markAsSeen(
-            resolve(PhpImapMailboxClient::class),
-            $order->{Order::MAIL_ID},
-        );
     }
 
     /**
@@ -72,14 +67,6 @@ class OrderService
      */
     public function replyOrder(Order $order, OrderReplyDto $orderReplyDto): void
     {
-        $this->orderRepository->reply(
-            $order,
-            $orderReplyDto
-        );
-
-        resolve(MailboxOrderService::class)->replyOrder(
-            $order,
-            $orderReplyDto
-        );
+        $this->orderRepository->reply($order, $orderReplyDto);
     }
 }

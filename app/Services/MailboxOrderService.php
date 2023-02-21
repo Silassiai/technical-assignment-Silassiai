@@ -7,11 +7,8 @@ use App\DTOs\OrderCreateDto;
 use App\DTOs\OrderReplyDto;
 use App\Models\Order;
 use App\Notifications\ReplyOrder;
-use App\Repositories\OrderRepository;
 use Exception;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Mail;
-use PhpImap\Exceptions\ConnectionException;
 
 class MailboxOrderService
 {
@@ -23,10 +20,9 @@ class MailboxOrderService
      */
     public function import(EmailClient $emailClient): void
     {
-
         try {
             $mailIds = $emailClient->mailbox('INBOX')->search();
-        } catch (ConnectionException $exception) {
+        } catch (Exception $exception) {
             logger()->error($exception);
             $mailIds = [];
         }

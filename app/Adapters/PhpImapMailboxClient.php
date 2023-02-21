@@ -58,6 +58,7 @@ class PhpImapMailboxClient implements EmailClient
 
     /**
      * Search mailbox using the imap_search().
+     *
      * @param $criteria - https://www.php.net/manual/en/function.imap-search.php
      * @return array
      */

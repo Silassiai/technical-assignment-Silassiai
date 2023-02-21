@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\OrderMarkAsReadSaved;
+use App\Events\OrderReplySaved;
+use App\Listeners\MarkMailOrderAsRead;
+use App\Listeners\SendOrderReplyNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -18,6 +22,12 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        OrderReplySaved::class => [
+            SendOrderReplyNotification::class,
+        ],
+        OrderMarkAsReadSaved::class => [
+            MarkMailOrderAsRead::class,
+        ]
     ];
 
     /**

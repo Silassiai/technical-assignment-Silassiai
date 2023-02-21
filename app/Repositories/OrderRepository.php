@@ -5,7 +5,10 @@ namespace App\Repositories;
 use App\DTOs\OrderCreateDto;
 use App\DTOs\OrderMarkAsReadDto;
 use App\DTOs\OrderReplyDto;
+use App\Events\OrderMarkAsReadSaved;
+use App\Events\OrderReplySaved;
 use App\Exceptions\OrderAlreadyMarkedAsRead;
+use App\Exceptions\OrderUpdateFailed;
 use App\Models\Order;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Throwable;
@@ -55,6 +58,8 @@ class OrderRepository
         throw_if(null !== $order->{Order::SEEN_AT}, OrderAlreadyMarkedAsRead::class);
 
         $order->update($orderMarkAsReadDto->toArray());
+
+        event(new OrderMarkAsReadSaved($order));
     }
 
     /**
@@ -67,5 +72,7 @@ class OrderRepository
     public function reply(Order $order, OrderReplyDto $orderReplyDto): void
     {
         $order->update($orderReplyDto->toArray());
+
+        event(new OrderReplySaved($order, $orderReplyDto));
     }
 }

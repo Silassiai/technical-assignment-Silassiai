@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Exception;
+use Throwable;
 
 class OrderAlreadyMarkedAsRead extends Exception
 {
@@ -11,6 +12,6 @@ class OrderAlreadyMarkedAsRead extends Exception
      */
     public function __construct(string $message = "Order has already been marked as read.")
     {
-        parent::__construct($message);
+        parent::__construct($message, 422);
     }
 }

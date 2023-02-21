@@ -15,7 +15,8 @@ class DTO implements DataTransferObject
      */
     public function toArray(): array
     {
-        return collect($this)->mapWithKeys(fn($value, $key) => [Str::snake($key) => $value]
+        return collect($this)->mapWithKeys(
+            fn($value, $key) => [Str::snake($key) => $value]
         )->toArray();
     }
 
@@ -28,8 +29,7 @@ class DTO implements DataTransferObject
     public static function fromRequest(FormRequest $formRequest): static
     {
         return new static(
-            ...collect($formRequest->validated())
-            ->mapWithKeys(
+            ...collect($formRequest->validated())->mapWithKeys(
                 fn($value, $key) => [Str::camel($key) => $value]
             )->toArray()
         );

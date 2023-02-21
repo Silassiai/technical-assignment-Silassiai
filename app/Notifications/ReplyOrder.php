@@ -18,7 +18,7 @@ class ReplyOrder extends Notification
      */
     public function __construct(
         private readonly OrderReplyDto $orderReplyDto,
-    ){
+    ) {
     }
 
     /**
@@ -40,8 +40,8 @@ class ReplyOrder extends Notification
     public function toMail(Order $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->subject('Order has been received')
-                    ->line($this->orderReplyDto->replyMessage);
+            ->subject('Order has been received')
+            ->line($this->orderReplyDto->replyMessage);
     }
 
     /**

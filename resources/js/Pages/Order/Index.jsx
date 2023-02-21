@@ -9,6 +9,7 @@ const ExpandedComponent = ({data}) => {
     const {reply_message, id, body, seen_at} = data || {};
     const [replyMessageValue, setReplyMessageValue] = useState(reply_message || 'Bedankt voor je order.');
     const [hasBeenReplied, setHasBeenReplied] = useState(null !== reply_message);
+    const [loading, setLoading] = useState(false);
     const [backendResponse, setBackendResponse] = useState(null);
 
     const markOrderAsOpened = () => {
@@ -22,11 +23,15 @@ const ExpandedComponent = ({data}) => {
     }
 
     const submitReply = () => {
-        axios.put(`/order/${id}/reply`, {reply_message: replyMessageValue}).then((r) => {
-            router.reload({only: ['orders']});
-            setHasBeenReplied(true);
-        }).catch((e) => {
+        setLoading(true);
+        axios.put(`/order/${id}/reply`, {reply_message: replyMessageValue})
+            .then((r) => {
+                router.reload({only: ['orders']});
+                setHasBeenReplied(true);
+            }).catch((e) => {
             if (e?.response?.data?.message) setBackendResponse(e.response.data.message);
+        }).finally(() => {
+            setLoading(false);
         })
     }
 
@@ -38,9 +43,7 @@ const ExpandedComponent = ({data}) => {
         <div
             className={`flex flex-wrap gap-4 p-4 `}
         >
-
             <div className={`flex grow shrink-0 basis-full`}>{body || 'No message body'}</div>
-
             <div className={`flex grow shrink-0 basis-full`}>
                 <textarea
                     disabled={hasBeenReplied}
@@ -52,7 +55,10 @@ const ExpandedComponent = ({data}) => {
             {backendResponse && <div className={`text-red-600`}>{backendResponse}</div>}
             {
                 !hasBeenReplied ? (
-                    <PrimaryButton onClick={submitReply}>
+                    <PrimaryButton
+                        processing={loading}
+                        className={``}
+                        onClick={submitReply}>
                         Reply
                     </PrimaryButton>
                 ) : null
@@ -112,9 +118,11 @@ export default function Index({auth, errors, orders}) {
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
-                            <p>Below you see the orders that has been imported in the database from de dedicated email.</p>
+                            <p>Below you see the orders that has been imported in the database from de dedicated
+                                email.</p>
                             <p>If you do not see any orders, you should run the below command:</p>
-                            <p><code className={`bg-slate-200 px-2 py-1 rounded`}>php artisan sync:inbox-orders</code></p>
+                            <p><code className={`bg-slate-200 px-2 py-1 rounded`}>php artisan sync:inbox-orders</code>
+                            </p>
                             <p>Or running the scheduler locally</p>
                             <p><code className={`bg-slate-200 px-2 py-1 rounded`}>php artisan schedule:work</code></p>
                         </div>
